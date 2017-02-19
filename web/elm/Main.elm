@@ -1,31 +1,31 @@
 module Main exposing (..)
 
-import Html exposing (Html, div, text, button)
-
-
-type alias Model =
-    Int
-
-
-type Msg
-    = No0p
+import Html exposing (Html, div, text, button, ul, li, span)
+import Rest
+import Todos
+import Types exposing (..)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( 0, Cmd.none )
+    ( [], Rest.sendTodosRequest )
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ text "hello world"
-        ]
+        [ Todos.viewTodos model ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        LoadTodos result ->
+            let
+                todos =
+                    Result.withDefault [] result
+            in
+                ( todos, Cmd.none )
 
 
 main : Program Never Model Msg
