@@ -3,7 +3,10 @@ defmodule Todos.TodoTest do
 
   alias Todos.Todo
 
-  @valid_attrs %{description: "some content", title: "some content"}
+  @valid_attrs %{
+    description: "some content",
+    title: "some content",
+    completed: false}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

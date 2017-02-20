@@ -31,7 +31,8 @@ defmodule Todos.TodoViewTest do
     assert rendered_todo == %{
       id: todo.id,
       title: todo.title,
-      description: todo.description
+      description: todo.description,
+      completed: todo.completed
     }
   end
 end

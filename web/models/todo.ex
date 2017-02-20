@@ -4,6 +4,7 @@ defmodule Todos.Todo do
   schema "todos" do
     field :title, :string
     field :description, :string
+    field :completed, :boolean, default: false
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Todos.Todo do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:title, :description])
-    |> validate_required([:title, :description])
+    |> cast(params, [:title, :description, :completed])
+    |> validate_required([:title, :description, :completed])
   end
 end

@@ -2,7 +2,9 @@ defmodule Todos.TodoControllerTest do
   use Todos.ConnCase
 
   alias Todos.Todo
-  @valid_attrs %{description: "some content", title: "some content"}
+  @valid_attrs %{
+    description: "some content",
+    title: "some content"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -20,7 +22,8 @@ defmodule Todos.TodoControllerTest do
     assert json_response(conn, 200)["data"] == %{
       "id" => todo.id,
       "title" => todo.title,
-      "description" => todo.description
+      "description" => todo.description,
+      "completed" => todo.completed
     }
   end
 
