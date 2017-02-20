@@ -14,12 +14,14 @@ type alias Todo =
     { id : Int
     , title : String
     , description : String
+    , completed : Bool
     }
 
 
 type Msg
     = LoadTodosRequest (Result Http.Error (List Todo))
     | PostTodoRequest (Result Http.Error Todo)
+    | UpdateTodoRequest (Result Http.Error Todo)
     | PostTodo
-    | Title String
-    | Description String
+    | Change String String
+    | CompleteTodo ( Int, Bool )

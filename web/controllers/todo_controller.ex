@@ -4,7 +4,9 @@ defmodule Todos.TodoController do
   alias Todos.Todo
 
   def index(conn, _params) do
-    todos = Repo.all(Todo)
+    query = from p in Todo,
+            order_by: [desc: :id]
+    todos = Repo.all(query)
     render(conn, "index.json", todos: todos)
   end
 
