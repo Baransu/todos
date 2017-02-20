@@ -4,7 +4,10 @@ import Http
 
 
 type alias Model =
-    List Todo
+    { todos : List Todo
+    , title : String
+    , description : String
+    }
 
 
 type alias Todo =
@@ -15,4 +18,8 @@ type alias Todo =
 
 
 type Msg
-    = LoadTodos (Result Http.Error (List Todo))
+    = LoadTodosRequest (Result Http.Error (List Todo))
+    | PostTodoRequest (Result Http.Error Todo)
+    | PostTodo
+    | Title String
+    | Description String
