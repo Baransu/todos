@@ -1,9 +1,43 @@
-module Rest exposing (..)
+module Rest
+    exposing
+        ( getTodosRequest
+        , postTodoRequest
+        , updateTodoRequest
+        , deleteTodoRequest
+        )
 
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Types exposing (..)
+
+
+-- PUBLIC API
+
+
+getTodosRequest : Cmd Msg
+getTodosRequest =
+    Http.send LoadTodosRequest getTodos
+
+
+postTodoRequest : ( String, String ) -> Cmd Msg
+postTodoRequest todo =
+    Http.send PostTodoRequest <| postTodo todo
+
+
+updateTodoRequest : ( Int, Bool ) -> Cmd Msg
+updateTodoRequest change =
+    Http.send UpdateTodoRequest <| updateTodo change
+
+
+deleteTodoRequest : Int -> Cmd Msg
+deleteTodoRequest id =
+    Http.send DeleteTodoRequest <| deleteTodo id
+
+
+
+-- PRIVATE API
+-- DECODER
 
 
 decodeTodo : Decode.Decoder Todo
@@ -20,30 +54,13 @@ decodeTodos =
     Decode.field "data" (Decode.list decodeTodo)
 
 
-getTodos : Http.Request (List Todo)
-getTodos =
-    Http.get "/api/todos" decodeTodos
-
-
 decodePostTodo : Decode.Decoder Todo
 decodePostTodo =
     Decode.field "data" decodeTodo
 
 
-postTodo : ( String, String ) -> Http.Request Todo
-postTodo ( title, description ) =
-    let
-        todo =
-            Encode.object
-                [ ( "title", Encode.string title )
-                , ( "description", Encode.string description )
-                ]
 
-        body =
-            Encode.object [ ( "todo", todo ) ]
-                |> Http.jsonBody
-    in
-        Http.post "/api/todos" body decodePostTodo
+-- REQUEST METHODS
 
 
 put : String -> Http.Body -> Decode.Decoder a -> Http.Request a
@@ -72,6 +89,31 @@ delete url id =
         }
 
 
+
+-- HTTP REQUEST
+
+
+getTodos : Http.Request (List Todo)
+getTodos =
+    Http.get "/api/todos" decodeTodos
+
+
+postTodo : ( String, String ) -> Http.Request Todo
+postTodo ( title, description ) =
+    let
+        todo =
+            Encode.object
+                [ ( "title", Encode.string title )
+                , ( "description", Encode.string description )
+                ]
+
+        body =
+            Encode.object [ ( "todo", todo ) ]
+                |> Http.jsonBody
+    in
+        Http.post "/api/todos" body decodePostTodo
+
+
 updateTodo : ( Int, Bool ) -> Http.Request Todo
 updateTodo ( id, completed ) =
     let
@@ -96,23 +138,3 @@ deleteTodo id =
             "/api/todos/" ++ toString id
     in
         delete url id
-
-
-getTodosRequest : Cmd Msg
-getTodosRequest =
-    Http.send LoadTodosRequest getTodos
-
-
-postTodoRequest : ( String, String ) -> Cmd Msg
-postTodoRequest todo =
-    Http.send PostTodoRequest <| postTodo todo
-
-
-updateTodoRequest : ( Int, Bool ) -> Cmd Msg
-updateTodoRequest change =
-    Http.send UpdateTodoRequest <| updateTodo change
-
-
-deleteTodoRequest : Int -> Cmd Msg
-deleteTodoRequest id =
-    Http.send DeleteTodoRequest <| deleteTodo id

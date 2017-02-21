@@ -1,9 +1,19 @@
-module View exposing (..)
+module View exposing (view)
 
-import Html exposing (Html, li, ul, div, text, button)
-import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
+import Html exposing (Html, li, ul, div, text, button, input)
+import Html.Attributes exposing (style, value, type_)
+import Html.Events exposing (onClick, onInput)
 import Types exposing (..)
+
+
+view : Model -> Html Msg
+view model =
+    div []
+        [ input [ type_ "text", value model.title, onInput <| Change "title" ] []
+        , input [ type_ "text", value model.description, onInput <| Change "description" ] []
+        , button [ onClick PostTodo ] [ text "send request" ]
+        , viewTodos model.todos
+        ]
 
 
 viewTodo : Todo -> Html Msg
