@@ -23,13 +23,13 @@ update msg model =
             let
                 todos =
                     case result of
-                        Ok a ->
-                            [ a ]
+                        Ok todo ->
+                            todo :: model.todos
 
                         Err _ ->
-                            []
+                            model.todos
             in
-                ( { model | todos = model.todos ++ todos }, Cmd.none )
+                ( { model | todos = todos }, Cmd.none )
 
         UpdateTodoRequest result ->
             let
