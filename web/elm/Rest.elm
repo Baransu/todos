@@ -59,11 +59,24 @@ put url body decoder =
         }
 
 
+delete : String -> Int -> Http.Request Int
+delete url id =
+    Http.request
+        { method = "DELETE"
+        , headers = []
+        , url = url
+        , body = Http.emptyBody
+        , expect = Http.expectStringResponse (\_ -> Ok id)
+        , timeout = Nothing
+        , withCredentials = False
+        }
+
+
 updateTodo : ( Int, Bool ) -> Http.Request Todo
 updateTodo ( id, completed ) =
     let
         url =
-            ("/api/todos/" ++ toString id)
+            "/api/todos/" ++ toString id
 
         todo =
             Encode.object
@@ -74,6 +87,15 @@ updateTodo ( id, completed ) =
                 |> Http.jsonBody
     in
         put url body decodePostTodo
+
+
+deleteTodo : Int -> Http.Request Int
+deleteTodo id =
+    let
+        url =
+            "/api/todos/" ++ toString id
+    in
+        delete url id
 
 
 getTodosRequest : Cmd Msg
@@ -89,3 +111,8 @@ postTodoRequest todo =
 updateTodoRequest : ( Int, Bool ) -> Cmd Msg
 updateTodoRequest change =
     Http.send UpdateTodoRequest <| updateTodo change
+
+
+deleteTodoRequest : Int -> Cmd Msg
+deleteTodoRequest id =
+    Http.send DeleteTodoRequest <| deleteTodo id

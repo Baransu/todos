@@ -64,6 +64,19 @@ update msg model =
             in
                 ( { model | todos = todos }, Cmd.none )
 
+        DeleteTodoRequest result ->
+            let
+                todos =
+                    case result of
+                        Ok id ->
+                            model.todos
+                                |> List.filter (\a -> a.id /= id)
+
+                        Err _ ->
+                            model.todos
+            in
+                ( { model | todos = todos }, Cmd.none )
+
         PostTodo ->
             let
                 -- basic vaidation here to check if title nad desritio are not empty
@@ -80,6 +93,9 @@ update msg model =
         CompleteTodo ( id, completed ) ->
             ( model, Rest.updateTodoRequest ( id, completed ) )
 
+        DeleteTodo id ->
+            ( model, Rest.deleteTodoRequest id )
+
         Change field value ->
             case field of
                 "title" ->
@@ -90,6 +106,9 @@ update msg model =
 
                 _ ->
                     ( model, Cmd.none )
+
+        _ ->
+            ( model, Cmd.none )
 
 
 main : Program Never Model Msg

@@ -1,6 +1,6 @@
 module Todos exposing (..)
 
-import Html exposing (Html, li, ul, div, text)
+import Html exposing (Html, li, ul, div, text, button)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Types exposing (..)
@@ -15,10 +15,15 @@ viewTodo { id, completed, title, description } =
             else
                 []
     in
-        li [ style styles, onClick <| CompleteTodo ( id, not completed ) ]
+        li [ style styles ]
             [ div [] [ text <| toString id ]
             , div [] [ text title ]
             , div [] [ text description ]
+            , button
+                [ onClick <| CompleteTodo ( id, not completed )
+                ]
+                [ text "complete" ]
+            , button [ onClick <| DeleteTodo id ] [ text "delete" ]
             ]
 
 
