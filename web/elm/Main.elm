@@ -4,8 +4,8 @@ import Html exposing (Html, div, text, button, ul, li, span, input)
 import Html.Attributes exposing (value, type_)
 import Html.Events exposing (onClick, onInput)
 import Rest
-import Todos
 import Types exposing (..)
+import View
 
 
 init : ( Model, Cmd Msg )
@@ -19,7 +19,7 @@ view model =
         [ input [ type_ "text", value model.title, onInput <| Change "title" ] []
         , input [ type_ "text", value model.description, onInput <| Change "description" ] []
         , button [ onClick PostTodo ] [ text "send request" ]
-        , Todos.viewTodos model.todos
+        , View.viewTodos model.todos
         ]
 
 

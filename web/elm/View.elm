@@ -1,4 +1,4 @@
-module Todos exposing (..)
+module View exposing (..)
 
 import Html exposing (Html, li, ul, div, text, button)
 import Html.Attributes exposing (style)
