@@ -1,8 +1,9 @@
 module View exposing (view)
 
-import Html exposing (Html, li, ul, div, text, button, input)
+import Html exposing (Html, li, ul, div, text, button, input, textarea)
 import Html.Attributes exposing (style, value, type_)
 import Html.Events exposing (onClick, onInput)
+import Markdown exposing (Options, defaultOptions)
 import Types exposing (..)
 
 
@@ -10,10 +11,18 @@ view : Model -> Html Msg
 view model =
     div []
         [ input [ type_ "text", value model.title, onInput <| Change "title" ] []
-        , input [ type_ "text", value model.description, onInput <| Change "description" ] []
+        , textarea [ value model.description, onInput <| Change "description" ] []
         , button [ onClick PostTodo ] [ text "send request" ]
         , viewTodos model.todos
         ]
+
+
+options : Options
+options =
+    { defaultOptions
+        | sanitize = True
+        , smartypants = True
+    }
 
 
 viewTodo : Todo -> Html Msg
@@ -28,7 +37,7 @@ viewTodo { id, completed, title, description } =
         li [ style styles ]
             [ div [] [ text <| toString id ]
             , div [] [ text title ]
-            , div [] [ text description ]
+            , Markdown.toHtmlWith options [] description
             , button
                 [ onClick <| CompleteTodo ( id, not completed )
                 ]
